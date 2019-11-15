@@ -13,7 +13,7 @@
 
 	Al diseñar este modulo se tuvo en cuenta que al capturar los datos se esta capturando datos de la camara en formato RGB 565, dado que para el correcto funcionamiento e implementacion de los demas modulos, se realizara un muestreo de estos 16 bits a un formato RGB 332 con 8 bits, para realizar eso primero se tuvo en cuenta el diagrama de tiempo que maneja la camara OV7670 que se puede ver a continuacion
 
-##	
+	
 ![CAPTURADATOS1](https://github.com/unal-edigital1-2019-2/work02-captura-datos-0v7670-grupo-04/blob/master/docs/figs/imagen1.PNG)
 
 teniendo en cuenta el diagrama estructural de los modulos, vemos que recibiremos 4 inputs de la camara, los cuales hemos llamado Href (El cual nos dara la señal de cuando la camara este transmitiendo un pixel),Vsync (sincronizacion vertical),Pclk (reloj de la camara para realizar el proceso sincronamente) y datos_in (Es donde guardamos los datos del byte del pixel que esta transmitiendo en ese instante)
