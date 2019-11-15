@@ -11,24 +11,25 @@
 
 ### Diseñar el sistema digital de captura de los pixeles de la cámara.
 
-	Al diseñar este modulo se tuvo en cuenta que al capturar los datos se esta capturando datos de la camara en formato RGB 565, dado que para el correcto funcionamiento e implementacion de los demas modulos, se realizara un muestreo de estos 16 bits a un formato RGB 332 con 8 bits, para realizar eso primero se tuvo en cuenta el diagrama de tiempo que maneja la camara OV7670 que se puede ver a continuacion
+Al diseñar este modulo se tuvo en cuenta que al capturar los datos se esta capturando datos de la camara en formato RGB 565, dado que para el correcto funcionamiento e implementacion de los demas modulos, se realizara un muestreo de estos 16 bits a un formato RGB 332 con 8 bits, para realizar eso primero se tuvo en cuenta el diagrama de tiempo que maneja la camara OV7670 que se puede ver a continuacion
 
 	
 ![CAPTURADATOS1](https://github.com/unal-edigital1-2019-2/work02-captura-datos-0v7670-grupo-04/blob/master/docs/figs/imagen1.PNG)
 
 teniendo en cuenta el diagrama estructural de los modulos, vemos que recibiremos 4 inputs de la camara, los cuales hemos llamado Href (El cual nos dara la señal de cuando la camara este transmitiendo un pixel),Vsync (sincronizacion vertical),Pclk (reloj de la camara para realizar el proceso sincronamente) y datos_in (Es donde guardamos los datos del byte del pixel que esta transmitiendo en ese instante)
 
-	![CAPTURADATOS2](https://github.com/unal-edigital1-2019-2/work02-captura-datos-0v7670-grupo-04/blob/master/docs/figs/imagen2.png)
+
+![CAPTURADATOS2](https://github.com/unal-edigital1-2019-2/work02-captura-datos-0v7670-grupo-04/blob/master/docs/figs/imagen2.png)
 
 ### Diseñar el downsampler y transmitir la información al buffer de memoria.
 
 Para realizar la captura de datos usaremos un registro que lo llamamos f_data_in565 [7:0] donde guardaremos el primer byte del formato 565 y acontinuacion en el siguiente ciclo de Pclk concatenaremos en otro registro el cual llamamos s_data_in565 [15:0] el primer byte obtenido con el siguiente que esta por venir, asi tendremos guardados los 16 bits en nuestro registro s_data_in565.A continuacion para realizar el muestro a formato RGB 332 usaremos solo los bits mas significativos s_data_in565[14:12] para el rojo, s_data_in565[9:7] para el verde y s_data_in565[4:3] para el azul y se envia directamente a la ram desarrollada en el trabajo anterior como se aprecia en la siguiente imagen, para analizar mas detalladamente el procedimiento realizado interno referirse a /src/test_cam.v.
 
-	![CAPTURADATOS3](https://github.com/unal-edigital1-2019-2/work02-captura-datos-0v7670-grupo-04/blob/master/docs/figs/imagen3.PNG)
+![CAPTURADATOS3](https://github.com/unal-edigital1-2019-2/work02-captura-datos-0v7670-grupo-04/blob/master/docs/figs/imagen3.PNG)
 
 ### Generar dos señales de reloj de 25Mhz y 24 Mhz para la pantalla VGA y la Cámara respectivamente.
 
-	Para realizar este modulo se utilizo el siguiente archivo generado por la funcionalidad del ISE clock wizard hdl/src/PLL/clk_100MHZ_to_25M_24M, en donde por debido a problemas con la licencia no fue posible generarse en nuestro entorno de trabajo sino en el del profesor de taller, el proceso se describe a continuacion 
+Para realizar este modulo se utilizo el siguiente archivo generado por la funcionalidad del ISE clock wizard hdl/src/PLL/clk_100MHZ_to_25M_24M, en donde por debido a problemas con la licencia no fue posible generarse en nuestro entorno de trabajo sino en el del profesor de taller, el proceso se describe a continuacion 
 
 1. Teniendo el proyecto de la camara abierto en el ISE, vamos a la paleta de opciones en la parte superior y buscamos Tools-> Core generator
 1. En la parte izquierda de la ventana que se abre buscamos Clocking Wizard
