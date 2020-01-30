@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2019-11-04T22:42:41</DateModified>
+  <DateModified>2020-01-30T21:28:28</DateModified>
   <ModuleName>test_cam</ModuleName>
   <SummaryTimeStamp>2019-11-04T13:15:59</SummaryTimeStamp>
-  <SavedFilePath>C:/Users/UECCI/Documents/GitHub/work02-captura-datos-OV7670/hdl/iseconfig/test_cam.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>C:/Users/UECCI/Documents/GitHub/work02-captura-datos-OV7670/hdl</ImplementationReportsDirectory>
+  <SavedFilePath>/home/david/Escritorio/digital/github/Proyecto/work02-captura-datos-0v7670-grupo-04/hdl/iseconfig/test_cam.xreport</SavedFilePath>
+  <ImplementationReportsDirectory>/home/david/Escritorio/digital/github/Proyecto/work02-captura-datos-0v7670-grupo-04/hdl/</ImplementationReportsDirectory>
   <DateInitialized>2019-11-04T13:14:13</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>

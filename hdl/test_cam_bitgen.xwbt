@@ -1,0 +1,8 @@
+INTSTYLE=ise
+INFILE=/home/david/Escritorio/digital/github/Proyecto/work02-captura-datos-0v7670-grupo-04/hdl/test_cam.ncd
+OUTFILE=/home/david/Escritorio/digital/github/Proyecto/work02-captura-datos-0v7670-grupo-04/hdl/test_cam.bit
+FAMILY=Artix7
+PART=xc7a100t-3csg324
+WORKINGDIR=/home/david/Escritorio/digital/github/Proyecto/work02-captura-datos-0v7670-grupo-04/hdl
+LICENSE=WebPack
+USER_INFO=211795229_0_0_235

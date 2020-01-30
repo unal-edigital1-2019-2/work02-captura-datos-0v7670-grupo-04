@@ -18,7 +18,8 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module test_cam(
+module test_cam 
+	(
     input wire clk,           // board clock: 100 MHz 
     input wire rst,         	// reset button
 
@@ -48,6 +49,7 @@ module test_cam(
 );
 
  
+ 
 
 
 //***********************************************************************
@@ -55,14 +57,17 @@ module test_cam(
 //***********************************************************************
 
 // Registros necesarios para el modulo captura de datos
-reg fila;
-reg  fb;
-reg  [DW-1:0] f_data_in565;
-reg  [(2*DW)-1:0] s_data_in565;
+
+reg  fb=0;
+reg  [1:0]d=0;
+reg  fila=0;
+reg  [DW-1:0] f_data_in565=0;
+reg  [(2*DW)-1:0] s_data_in565=0;
 
 
 // Modulo que nos permite recivir los bytes (RGB 565) que genera la camara
 // y guardar en la ram (RGB 332)
+
 always @ (posedge Pclk)
 begin
 //Guardamos 1 byte y damos paso a el registro del segundo byte 
@@ -71,6 +76,7 @@ if (fb==0 && Href==1)
 begin
 f_data_in565<=datos_in;
 fb<=fb+1;
+//DP_RAM_regW<=1; //activa la señal de permiso de escritura
 end
 //Guardamos el 2do byte y lo contatenamos para tener el registro 
 //del pixel en formato RGB 565.
@@ -78,53 +84,117 @@ end
 //el pixel en formato RGB 332 y lo enviamos a la ram
 if (fb==1 && Href==1)
 begin
-fb<=0;
 s_data_in565 = {f_data_in565,datos_in};
- DP_RAM_data_in = {s_data_in565 [14:12],s_data_in565 [9:7], s_data_in565 [4:3]};
+DP_RAM_data_in = {s_data_in565 [14:12],s_data_in565 [9:7], s_data_in565 [4:3]};
+fb<=0;
+
 end
 end
 
+//********************************************************************************
 
 // Modulo que controla la direccion de escritura
+
 always @ (negedge Pclk)begin
+if (Href==1)begin
+d=d+1;
+DP_RAM_regW<=1; //activa la señal de permiso de escritura
+end
 // Cuando la camara envia la señal Vsync 
 //la direccion de escritura es el pixel cero
 if (Vsync==1 && Href==0)begin
 DP_RAM_addr_in<=0;
 end
 //Cada 2 pulsos de Pclk la direccion aumenta en 1.
-if (Href==1 && fb==0)begin
+if (Href==1 && d==2 )begin
 DP_RAM_addr_in<=DP_RAM_addr_in+1;
-end
-end
-
-// Modulo que activa señal (permiso) de escritura cuando la camara de la señal Vsync
-always @ (posedge Vsync)
-begin
-if (Href==0)
-begin
- DP_RAM_regW<=1;
+d=0;
+DP_RAM_regW<=0; //desactiva la señal de permiso de escritura
 end
 end
 
 
-// Modulo que desactiva la señal de escritura
-// Contador de filas 
+
+
+
+
+//***********************************************************************
+//***********************************************************************
+//***********************************************************************
+
+
+//***********************************************************************
+// modulo contador de Href
+//***********************************************************************
+/*
+input    wire resetcont
+	output clk1;
+	
+	output  [7:0] an;
+ output  [6:0] seg;
+ 
+
+reg  wire pf;
+reg  d;
+reg   wire rt;
+reg [3:0] zi;
+
+
+
 always @ (posedge Href)
 begin
-if (DP_RAM_regW==1)begin
-fila<=fila+1;
-end
-end
-//se desactiva señal (permiso) de escritura despues de 480 filas
-always @ (negedge Href)
+if (pf==1 && rt==0)
 begin
-if (fila==479)begin
-DP_RAM_regW<=0;
-fila<=0;
+fila=fila+1;
+end
+
+
+if (Vsync==1 && Href==0)
+begin
+pf<=1;
+end
+
+if (Vsync==1 && pf==1)
+begin
+pf<=0;
+rt<=1;
 end
 end
 
+always @ (posedge resetcont)
+begin
+rt=0;
+end
+
+*/
+
+
+/*
+ reg [8:0] fila =1;
+reg [3:0] zi;
+reg d;
+
+
+
+always @ (posedge clk1)
+begin
+d<=~d;
+if (d==0)
+begin
+zi<=fila [7:4];
+end
+else
+begin
+zi<=fila [3:0];
+end
+end
+
+
+
+relog (.clk(clk), .clk1(clk1));
+anodos  (.zi(d), .an(an));
+bdcseg (.zi(zi), .seg(seg));
+*/
 
 //***********************************************************************
 //***********************************************************************
@@ -145,7 +215,7 @@ reg  [AW-1: 0] DP_RAM_addr_out;
 parameter CAM_SCREEN_X = 160;
 parameter CAM_SCREEN_Y = 120;
 
-localparam AW = 15; // LOG2(CAM_SCREEN_X*CAM_SCREEN_Y)
+localparam AW = 17; // LOG2(CAM_SCREEN_X*CAM_SCREEN_Y)
 localparam DW = 8;
 
 // El color es RGB 332
